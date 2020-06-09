@@ -1,0 +1,18 @@
+[package]
+name = "sensit"
+version = "0.1.0"
+authors = ["SORACOM"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+num_enum = "0.4.3"
+serde = { version = "1.0.106", features = ["derive"] }
+serde_json = "1.0"
+serde_repr = "0.1"
+soracom-orbit-sdk = { path = "../../" }
+wee_alloc = "0.4"

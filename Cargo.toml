@@ -1,0 +1,13 @@
+[package]
+name = "soracom-orbit-sdk"
+version = "1.0.0"
+authors = ["SORACOM"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+serde = "^1"
+serde_derive = "^1"
+serde_json = "^1"
+wee_alloc = "0.4"
