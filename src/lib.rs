@@ -17,6 +17,8 @@ extern "C" {
     pub fn orbit_set_output_content_type(ptr: i32, len: i32);
     pub fn orbit_get_userdata(ptr: i32, len: i32) -> i32;
     pub fn orbit_get_userdata_len() -> i32;
+    pub fn orbit_get_original_request(ptr: i32, len: i32) -> i32;
+    pub fn orbit_get_original_request_len() -> i32;
 }
 
 use std::mem::transmute;
@@ -130,6 +132,23 @@ pub fn get_userdata() -> String {
         let ptr = Box::into_raw(v.into_boxed_slice()) as *mut u8;
         let ptri = transmute::<*mut u8, i32>(ptr);
         let actual_len = orbit_get_userdata(ptri, len);
+
+        let v = Vec::from_raw_parts(ptr, actual_len as usize, actual_len as usize);
+        match String::from_utf8(v) {
+            Ok(str) => str,
+            Err(_) => String::from(""),
+        }
+    }
+}
+
+pub fn get_original_request() -> String {
+    unsafe {
+        let len = orbit_get_original_request_len();
+        let mut v = Vec::<u8>::with_capacity(len as usize);
+        v.set_len(len as usize);
+        let ptr = Box::into_raw(v.into_boxed_slice()) as *mut u8;
+        let ptri = transmute::<*mut u8, i32>(ptr);
+        let actual_len = orbit_get_original_request(ptri, len);
 
         let v = Vec::from_raw_parts(ptr, actual_len as usize, actual_len as usize);
         match String::from_utf8(v) {
