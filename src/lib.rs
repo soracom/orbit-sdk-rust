@@ -108,7 +108,7 @@ pub fn set_output_json(json_str: &str) {
     }
 }
 
-pub fn set_sim_tags(tags: &HashMap<&str, &str>) {
+pub fn set_sim_tags(tags: &HashMap<&str, Option<&str>>) {
     unsafe {
         let tags_json_str = serde_json::to_string(tags).unwrap();
         let ptr = tags_json_str.as_bytes().as_ptr();
