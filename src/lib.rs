@@ -108,21 +108,24 @@ pub fn set_output_json(json_str: &str) {
     }
 }
 
-pub fn set_tag_value(name: &str, value: Option<&str>) {
+pub fn set_tag_value(name: &str, value: &str) {
     unsafe {
         let name_ptr = transmute::<*const u8, i32>(name.as_ptr());
         let name_len = name.len() as i32;
-        let value_pointer = match value {
-            Some(v) => transmute::<*const u8, i32>(v.as_ptr()),
-            None => 0,
-        };
-        let value_len: i32 = match value {
-            Some(v) => v.len() as i32,
-            None => 0,
-        };
+        let value_pointer = transmute::<*const u8, i32>(value.as_ptr());
+        let value_len: i32 = value.len() as i32;
         orbit_set_tag_value(name_ptr, name_len, value_pointer, value_len);
     }
 }
+
+pub fn delete_tag(name: &str) {
+    unsafe {
+        let name_ptr = transmute::<*const u8, i32>(name.as_ptr());
+        let name_len = name.len() as i32;
+        orbit_set_tag_value(name_ptr, name_len, 0, 0);
+    }
+}
+
 
 pub fn get_location() -> Option<Location> {
     unsafe {
