@@ -14,7 +14,7 @@ extern "C" {
     pub fn orbit_get_location_lon() -> f64;
     pub fn orbit_get_timestamp() -> i64;
     pub fn orbit_set_output(ptr: i32, len: i32);
-    pub fn orbit_set_sim_tags(ptr: i32, len: i32);
+    pub fn orbit_set_tag_value(name_ptr: i32, name_len: i32, value_ptr: i32, value_len: i32);
     pub fn orbit_set_output_content_type(ptr: i32, len: i32);
     pub fn orbit_get_userdata(ptr: i32, len: i32) -> i32;
     pub fn orbit_get_userdata_len() -> i32;
@@ -22,7 +22,7 @@ extern "C" {
     pub fn orbit_get_original_request_len() -> i32;
 }
 
-use std::{collections::HashMap, mem::transmute};
+use std::mem::transmute;
 
 #[derive(Serialize)]
 pub struct Location {
@@ -108,13 +108,19 @@ pub fn set_output_json(json_str: &str) {
     }
 }
 
-pub fn set_sim_tags(tags: &HashMap<&str, Option<&str>>) {
+pub fn set_tag_value(name: &str, value: Option<&str>) {
     unsafe {
-        let tags_json_str = serde_json::to_string(tags).unwrap();
-        let ptr = tags_json_str.as_bytes().as_ptr();
-        let ptr = transmute::<*const u8, i32>(ptr);
-        let len = tags_json_str.len();
-        orbit_set_sim_tags(ptr, len as i32);
+        let name_ptr = transmute::<*const u8, i32>(name.as_ptr());
+        let name_len = name.len() as i32;
+        let value_pointer = match value {
+            Some(v) => transmute::<*const u8, i32>(v.as_ptr()),
+            None => 0,
+        };
+        let value_len: i32 = match value {
+            Some(v) => v.len() as i32,
+            None => 0,
+        };
+        orbit_set_tag_value(name_ptr, name_len, value_pointer, value_len);
     }
 }
 
