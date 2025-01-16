@@ -14,6 +14,8 @@ extern "C" {
     pub fn orbit_get_location_lon() -> f64;
     pub fn orbit_get_timestamp() -> i64;
     pub fn orbit_set_output(ptr: i32, len: i32);
+    pub fn orbit_set_tag_value(name_ptr: i32, name_len: i32, value_ptr: i32, value_len: i32);
+    pub fn orbit_delete_tag_value(name_ptr: i32, name_len: i32);
     pub fn orbit_set_output_content_type(ptr: i32, len: i32);
     pub fn orbit_get_userdata(ptr: i32, len: i32) -> i32;
     pub fn orbit_get_userdata_len() -> i32;
@@ -102,10 +104,29 @@ pub fn set_output_json(json_str: &str) {
 
         let ptr = json_str.as_bytes().as_ptr();
         let ptr = transmute::<*const u8, i32>(ptr);
-        let len = json_str.len();
+        let len: usize = json_str.len();
         orbit_set_output(ptr, len as i32);
     }
 }
+
+pub fn set_tag_value(name: &str, value: &str) {
+    unsafe {
+        let name_ptr = transmute::<*const u8, i32>(name.as_ptr());
+        let name_len = name.len() as i32;
+        let value_pointer = transmute::<*const u8, i32>(value.as_ptr());
+        let value_len: i32 = value.len() as i32;
+        orbit_set_tag_value(name_ptr, name_len, value_pointer, value_len);
+    }
+}
+
+pub fn delete_tag(name: &str) {
+    unsafe {
+        let name_ptr = transmute::<*const u8, i32>(name.as_ptr());
+        let name_len = name.len() as i32;
+        orbit_delete_tag_value(name_ptr, name_len);
+    }
+}
+
 
 pub fn get_location() -> Option<Location> {
     unsafe {
