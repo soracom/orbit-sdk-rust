@@ -18,6 +18,10 @@ rustup target add wasm32-unknown-unknown
 
 The `src` directory in this repository contains the SDK's source code. For more specific usage, please refer to each sample in the `examples` directory.
 
+### Notice
+
+Please use the latest **tagged** release that supports the features currently available on the Soracom platform. The `main` branch may contain unreleased features and could break your code.
+
 ## Examples
 
 The `examples` directory in this repository includes the following samples:
