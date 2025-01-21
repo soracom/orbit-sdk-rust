@@ -20,7 +20,7 @@ The `src` directory in this repository contains the SDK's source code. For more 
 
 ### Notice
 
-Please use recent tagged released version
+Please use the latest **tagged** release that supports the features currently available on the Soracom platform. The `main` branch may contain unreleased features and could break your code.
 
 ## Examples
 
