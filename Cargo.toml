@@ -1,6 +1,6 @@
 [package]
 name = "soracom-orbit-sdk"
-version = "1.0.0"
+version = "1.1.1"
 authors = ["SORACOM"]
 edition = "2021"
 
